@@ -19,10 +19,12 @@ RUN apt-get update && apt-get install -y \
     && docker-php-ext-install zip \
     && apt-get purge --auto-remove -y g++ \
     && rm -rf /var/lib/apt/lists/*
-
-
+#install composer global
 RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
 RUN php composer-setup.php --install-dir=/usr/local/bin --filename=composer
 RUN php -r "unlink('composer-setup.php');"
+#create user and set permissions
 RUN usermod -u 1000 www-data
+RUN chown -R www-data:www-data /var/www/
+#define user
 USER www-data
